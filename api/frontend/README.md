@@ -1,0 +1,1 @@
+frontend template pulled from https://github.com/ahmet-cetinkaya/hrms-project-frontend/
