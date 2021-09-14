@@ -7,12 +7,36 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CityService from "../../services/cityService";
 import FormSelect from "../FormSelect/FormSelect";
 import JobAdvertService from "../../services/jobAdvertService";
-import JobAdvertsListItem from "./JobAdvertsListItem";
+import EmployeeListItem from "./JobAdvertsListItem";
+import EmployeeListItemExtended from "./JobAdvertsListItemExtended";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import WorkingTimeService from "../../services/workingTimeService";
 import lodash from "lodash";
 
 export default function JobAdvertsList({ size = 10, pagination = true }) {
+  // define employee data
+  const [employeesData, fetchAllEmployees] = useState([]);
+  const loadEmployeesData = async () => {
+      const res = await fetch('employees');
+      const data = await res.json();
+      const employeesData = fetchAllEmployees(data);
+  }
+  // define locations data
+  const [locationsData, fetchAllLocations] = useState([]);
+  const loadLocationsData = async () => {
+    const res = await fetch('locations');
+    const data = await res.json();
+    const locationsData = fetchAllLocations(data);
+  }
+
+  const [employersData, fetchAllEmployers] = useState([]);
+  const loadEmployersData = async () => {
+    const res = await fetch('employers');
+    const data = await res.json();
+    const employersData = fetchAllEmployers(data);
+  }
+
+  // JOB ALERT SERVICE //
   const [jobAdverts, setJobAdverts] = useState(null),
     [filter, setFilter] = useState(null),
     // create a memorised value / list based on new instance of JobAdvertService()
@@ -44,12 +68,12 @@ export default function JobAdvertsList({ size = 10, pagination = true }) {
         values.city.id,
         values.workingTime.id,
         0,
-        jobAdverts.size
+        locationsData.size
       );
       setFilter(values);
     },
     clearFilter = () => {
-      getAllByIsActiveForList(0, jobAdverts.size);
+      getAllByIsActiveForList(0, locationsData.size);
       setFilter(null);
     };
 
@@ -88,157 +112,131 @@ export default function JobAdvertsList({ size = 10, pagination = true }) {
       workingTime: Yup.object(),
     });
 
-  // useEffect(() => {
-  //   getAllByIsActiveForList(0, size);
-  //   getAllCities();
-  //   getAllWorkingTimes();
-  // }, [getAllByIsActiveForList, getAllCities, getAllWorkingTimes, size]);
+  useEffect(() => {
+    getAllByIsActiveForList(0, size);
+    getAllCities();
+    getAllWorkingTimes();
+    }, [getAllByIsActiveForList, getAllCities, getAllWorkingTimes, size]);
 
-  // const [data, setCurrentTime] = useState(0);
-  // useEffect(() => {
-  //   const [cityId, Name] = useState();
-  //   fetch('/employees').then(res => res.json()).then(data => {
-  //     console.log(data)
-  //     console.log(data.name)
-  //     setCurrentTime(data.cityId);
-  //   });
-  // }, [data.cityId, data.name]);
-
-    const [employees, fetchEmployees] = useState([]);
-  
     useEffect(() => {
-        fetch('employees').then(response => {
-          return response.json();
-        }
-      ).then(employeesData => fetchEmployees(employeesData))
+      loadEmployeesData();
+      loadEmployersData();
+      loadLocationsData();
     }, []);
-
-  // return (
-  //   <div className='p-4'>
-  //     <div className='text-center mb-3'>
-  //       <h1 className='text-secondary fw-bold'>
-  //         Featured Jobs<span className='text-primary'>.</span>
-  //       </h1>
-  //       <p>Find your dream job.</p>
-  //       <div>
-  //         <button
-  //           className='btn btn-secondary'
-  //           data-bs-toggle='offcanvas'
-  //           data-bs-target='#jobAdvertsListFilter'
-  //           aria-controls='jobAdvertsListFilter'
-  //         >
-  //           <i className='bi bi-filter'></i> Filter
-  //         </button>
-  //       </div>
-  //     </div>
-  //     {jobAdverts === null ? (
-  //       <LoadingSpinner />
-  //     ) : jobAdverts.content.length > 0 ? (
-  //       <div className='row justify-content-center'>
-  //         {jobAdverts.content.map((jobAdvert) => (
-  //           <JobAdvertsListItem key={jobAdvert.id} jobAdvert={jobAdvert} />
-  //         ))}
-  //         {/* Pagination */}
-  //         {pagination && (
-  //           <nav>
-  //             <ul className='pagination justify-content-center'>
-  //               <li className={`page-item ${jobAdverts.first ? "disabled" : ""}`}>
-  //                 <button
-  //                   className='page-link'
-  //                   onClick={() => changePagination(jobAdverts.number - 1, jobAdverts.size)}
-  //                 >
-  //                   Previous
-  //                 </button>
-  //               </li>
-  //               {lodash.times(jobAdverts.totalPages, (i) => (
-  //                 <li className={`page-item ${jobAdverts.number === i ? "active" : ""}`}>
-  //                   <button
-  //                     className='page-link'
-  //                     onClick={() => changePagination(i, jobAdverts.size)}
-  //                   >
-  //                     {i + 1}
-  //                   </button>
-  //                 </li>
-  //               ))}
-  //               <li className={`page-item ${jobAdverts.last ? "disabled" : ""}`}>
-  //                 <button
-  //                   className='page-link'
-  //                   onClick={() => changePagination(jobAdverts.number + 1, jobAdverts.size)}
-  //                 >
-  //                   Next
-  //                 </button>
-  //               </li>
-  //             </ul>
-  //             <div className='text-center'>
-  //               <select
-  //                 id='pageSizeSelect'
-  //                 className='bg-body border-light'
-  //                 onChange={(e) => getAllByIsActiveForList(0, e.currentTarget.value)}
-  //               >
-  //                 {[10, 20, 50, 100].map((size) => (
-  //                   <option value={size}>{size}</option>
-  //                 ))}
-  //               </select>
-  //             </div>
-  //           </nav>
-  //         )}
-  //       </div>
-  //     ) : (
-  //       <div className='d-flex justify-content-center align-items-center'>
-  //         <i className='bi bi-file-earmark-x text-danger me-2 fs-2' />
-  //         No job adverts were found suitable.
-  //       </div>
-  //     )}
-  //     <div
-  //       className='offcanvas offcanvas-start'
-  //       tabIndex='-1'
-  //       id='jobAdvertsListFilter'
-  //       aria-labelledby='jobAdvertsListFilter'
-  //     >
-  //       <div className='offcanvas-header'>
-  //         <h1 className='offcanvas-title' id='jobAdvertsListFilter'>
-  //           Filter
-  //         </h1>
-  //         <button
-  //           type='button'
-  //           className='btn-close text-reset'
-  //           data-bs-dismiss='offcanvas'
-  //           aria-label='Close'
-  //         ></button>
-  //       </div>
-  //       <div className='offcanvas-body'>
-  //         <Formik
-  //           initialValues={initialValues}
-  //           validationSchema={validationSchema}
-  //           onSubmit={(values) => applyFilter(values)}
-  //         >
-  //           <Form>
-  //             <FormSelect name='city' options={cities.map((c) => ({ value: c, label: c.name }))} />
-  //             <FormSelect
-  //               name='workingTime'
-  //               options={workingTimes.map((wt) => ({ value: wt, label: wt.name }))}
-  //             />
-  //             <button type='submit' className='btn btn-primary w-100'>
-  //               Filter
-  //             </button>
-  //           </Form>
-  //         </Formik>
-  //         <div className='text-center'>
-  //           <button className='btn btn-light mt-2' onClick={() => clearFilter()}>
-  //             Clear filters
-  //           </button>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+    // console.log(loadEmployersData)
 
   return (
-    <div>
-      {employees.map((item) => (
-        <div key={item.id}>{item.name}
-          <p>{item.cityId}</p></div>
-      ))}
+      <div className='p-4'>
+      <div className='text-center mb-3'>
+        <h1 className='text-secondary fw-bold'>
+          Find Humans
+        </h1>
+        <div>
+          <button
+            className='btn btn-secondary'
+            data-bs-toggle='offcanvas'
+            data-bs-target='#jobAdvertsListFilter'
+            aria-controls='jobAdvertsListFilter'
+          >
+            <i className='bi bi-filter'></i> Filter
+          </button>
+        </div>
+      </div>
+      {/* If data is null (still being retrieved) then display the loading spinner */}
+      {/* If there exists no data once it's loaded then show "No humans available" */}
+      {employeesData === null ? <LoadingSpinner /> : employeesData.length > 0 ? (
+        <div className='row justify-content-center'>
+        {employeesData.map((item) => (<EmployeeListItem key={item.id} employeeItem={item}/>))}
+
+          {/* Pagination */}
+          {pagination && (
+            <nav>
+              <ul className='pagination justify-content-center'>
+                <li className={`page-item ${employeesData.first ? "disabled" : ""}`}>
+                  <button
+                    className='page-link'
+                    onClick={() => changePagination(employeesData.number - 1, employeesData.size)}
+                  >
+                    Previous
+                  </button>
+                </li>
+                {lodash.times(employeesData.totalPages, (i) => (
+                  <li className={`page-item ${employeesData.number === i ? "active" : ""}`}>
+                    <button
+                      className='page-link'
+                      onClick={() => changePagination(i, employeesData.size)}
+                    >
+                      {i + 1}
+                    </button>
+                  </li>
+                ))}
+                <li className={`page-item ${employeesData.last ? "disabled" : ""}`}>
+                  <button
+                    className='page-link'
+                    onClick={() => changePagination(employeesData.number + 1, employeesData.size)}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+              <div className='text-center'>
+                <select
+                  id='pageSizeSelect'
+                  className='bg-body border-light'
+                  onChange={(e) => getAllByIsActiveForList(0, e.currentTarget.value)}
+                >
+                  {[10, 20, 50, 100].map((size) => (
+                    <option value={size}>{size}</option>
+                  ))}
+                </select>
+              </div>
+            </nav>
+          )}
+        </div>
+      ) : (
+        <div className='d-flex justify-content-center align-items-center'>
+          <i className='bi bi-file-earmark-x text-danger me-2 fs-2' />
+          No humans were available.
+        </div>
+      )}
+      <div
+        className='offcanvas offcanvas-start'
+        tabIndex='-1'
+        id='jobAdvertsListFilter'
+        aria-labelledby='jobAdvertsListFilter'
+      >
+        <div className='offcanvas-header'>
+          <h1 className='offcanvas-title' id='jobAdvertsListFilter'>
+            Filter
+          </h1>
+          <button
+            type='button'
+            className='btn-close text-reset'
+            data-bs-dismiss='offcanvas'
+            aria-label='Close'
+          ></button>
+        </div>
+        <div className='offcanvas-body'>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => applyFilter(values)}
+          >
+            <Form>
+              <FormSelect name='city' options={locationsData.map((c) => ({ value: c.id, label: c.name }))} />
+              <FormSelect name='employer' options={employersData.map((wt) => ({ value: wt.id, label: wt.name }))}/>
+              <button type='submit' className='btn btn-primary w-100'>
+                Filter
+              </button>
+            </Form>
+          </Formik>
+          <div className='text-center'>
+            <button className='btn btn-light mt-2' onClick={() => clearFilter()}>
+              Clear filters
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

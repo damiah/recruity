@@ -7,7 +7,7 @@ export default function Footer() {
       <div className='row'>
         <div className='col'>
           <Link to='/' className='navbar-brand fs-2 fw-bold'>
-            HRMS <span className='text-secondary'>Project</span>
+            Recruity
           </Link>
           <p className='text-muted'>
             Magna consequat ex pariatur ipsum ex adipisicing labore. Laborum magna aute aute quis cupidatat do labore esse ad deserunt commodo quis ex. Id consectetur deserunt
@@ -24,12 +24,12 @@ export default function Footer() {
           <ul className='list-group'>
             <li className='list-group-item ps-0 border-0'>
               <Link to='/' className='text-muted text-decoration-none'>
-                Find Job
+                Find people
               </Link>
             </li>
             <li className='list-group-item ps-0 border-0'>
               <Link to='/' className='text-muted text-decoration-none'>
-                Companies
+                Recruiters
               </Link>
             </li>
             <li className='list-group-item ps-0 border-0'>
@@ -39,7 +39,7 @@ export default function Footer() {
             </li>
             <li className='list-group-item ps-0 border-0'>
               <Link to='/' className='text-muted text-decoration-none'>
-                Post a Job
+                Find a job
               </Link>
             </li>
             <li className='list-group-item ps-0 border-0'>
