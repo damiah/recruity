@@ -1,5 +1,6 @@
 {
   "name": "recruity-frontend",
+  "homepage": "http://damiah.github.io/recruity",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,8 +22,10 @@
     "web-vitals": "^1.1.2",
     "yup": "^0.32.9"
   },
-"main": "/Users/miahstewart/Documents/personal/recruity/frontend/src/index.js",
+  "main": "/Users/miahstewart/Documents/personal/recruity/frontend/src/index.js",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "start-api": "cd /Users/miahstewart/Documents/personal/recruity/api && /Users/miahstewart/opt/anaconda3/envs/hrms-project-frontend/bin/flask run --no-debugger",
     "build": "react-scripts build",
@@ -47,5 +50,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
+  }
 }
