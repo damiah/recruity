@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/recruity/static/css/main.8080592c.chunk.css",
+    "main.js": "/recruity/static/js/main.af80f5fb.chunk.js",
+    "main.js.map": "/recruity/static/js/main.af80f5fb.chunk.js.map",
+    "runtime-main.js": "/recruity/static/js/runtime-main.48c3aee1.js",
+    "runtime-main.js.map": "/recruity/static/js/runtime-main.48c3aee1.js.map",
+    "static/css/2.8828a1bf.chunk.css": "/recruity/static/css/2.8828a1bf.chunk.css",
+    "static/js/2.ce3cab47.chunk.js": "/recruity/static/js/2.ce3cab47.chunk.js",
+    "static/js/2.ce3cab47.chunk.js.map": "/recruity/static/js/2.ce3cab47.chunk.js.map",
+    "static/js/3.fc50a227.chunk.js": "/recruity/static/js/3.fc50a227.chunk.js",
+    "static/js/3.fc50a227.chunk.js.map": "/recruity/static/js/3.fc50a227.chunk.js.map",
+    "index.html": "/recruity/index.html",
+    "static/css/2.8828a1bf.chunk.css.map": "/recruity/static/css/2.8828a1bf.chunk.css.map",
+    "static/css/main.8080592c.chunk.css.map": "/recruity/static/css/main.8080592c.chunk.css.map",
+    "static/js/2.ce3cab47.chunk.js.LICENSE.txt": "/recruity/static/js/2.ce3cab47.chunk.js.LICENSE.txt",
+    "static/media/Navbar.scss": "/recruity/static/media/bootstrap-icons.dfd0ea12.woff2",
+    "static/media/overlay-vector.61018082.svg": "/recruity/static/media/overlay-vector.61018082.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.48c3aee1.js",
+    "static/css/2.8828a1bf.chunk.css",
+    "static/js/2.ce3cab47.chunk.js",
+    "static/css/main.8080592c.chunk.css",
+    "static/js/main.af80f5fb.chunk.js"
+  ]
+}
